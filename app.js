@@ -1,9 +1,11 @@
 import 'dotenv/config';
 
 import linebot from 'linebot';
+import express from 'express';
 import station from './command/station.js';
 import oilPrice from './command/oil-price.js';
 
+const app = express();
 const bot = linebot({
   channelId: process.env.CHANNEL_ID,
   channelSecret: process.env.CHANNEL_SECRET,
@@ -40,6 +42,15 @@ bot.on('message', async function (event) {
     }
   }
 });
+
+app.get('/ping', (req, res) => {
+  if (req.query.key !== process.env.PING_SECRET) {
+    return res.status(403).send('Forbidden');
+  }
+  res.send('pong');
+});
+
+app.post('/', bot.parser());
 
 bot.listen('/', process.env.PORT || 3000, () => {
   console.log('機器人啟動');
