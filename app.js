@@ -52,6 +52,8 @@ app.get('/ping', (req, res) => {
 
 app.post('/', bot.parser());
 
-bot.listen('/', process.env.PORT || 3000, () => {
+const port = process.env.PORT || 3000;
+
+app.listen(port, () => {
   console.log('機器人啟動');
 });
