@@ -44,7 +44,8 @@ bot.on('message', async function (event) {
 });
 
 app.get('/ping', (req, res) => {
-  if (req.query.key !== process.env.PING_SECRET) {
+  const key = req.query.key;
+  if (!key || key !== process.env.PING_SECRET) {
     return res.status(403).send('Forbidden');
   }
   res.send('pong');
