@@ -24,7 +24,7 @@ export default async (event) => {
               },
               {
                 type: 'text',
-                text: `${oil.參考牌價}`,
+                text: `${oil.參考牌價_金額}`,
                 flex: 1,
                 color: '#ff0000',
                 align: 'center',
