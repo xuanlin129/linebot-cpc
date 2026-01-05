@@ -2,6 +2,7 @@ import 'dotenv/config';
 
 import linebot from 'linebot';
 import express from 'express';
+import axios from 'axios';
 import station from './command/station.js';
 import oilPrice from './command/oil-price.js';
 
@@ -54,6 +55,23 @@ app.get('/ping', (req, res) => {
 app.post('/', bot.parser());
 
 const port = process.env.PORT || 3000;
+
+// Render Keep-alive
+app.get('/health', (req, res) => {
+  res.status(200).send('OK');
+});
+
+setInterval(async () => {
+  try {
+    const url = process.env.RENDER_EXTERNAL_URL
+      ? `${process.env.RENDER_EXTERNAL_URL}/health`
+      : `http://localhost:${port}/health`;
+    await axios.get(url);
+    console.log('Keep-alive ping success');
+  } catch (error) {
+    console.error('Keep-alive ping failed');
+  }
+}, 14 * 60 * 1000); // 14 minutes
 
 app.listen(port, () => {
   console.log('機器人啟動');
